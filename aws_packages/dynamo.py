@@ -36,3 +36,7 @@ class DataHandler:
 
         entry = items[0]
         return entry
+
+    def scan_items(self, limit=1000):
+        result = self.table.scan(Limit=limit)
+        return result["Items"]
