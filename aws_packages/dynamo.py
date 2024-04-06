@@ -9,7 +9,7 @@ def get_dynamodb_client():
 
 
 class DataHandler:
-    def __init__(self, table_name, logger, client=None, key="pk"):
+    def __init__(self, table_name, logger=None, client=None, key="pk"):
         self.key = key
         if client is None:
             self._client = get_dynamodb_client()
@@ -22,6 +22,11 @@ class DataHandler:
     def add_item(self, identifier, value):
         self.table.put_item(Item={self.key: identifier, **value})
 
+    def log(self, message):
+        if self._logger is None:
+            print(message)
+        self._logger.info(msg=message)
+
     def get_item(self, identifier):
         response = self.table.query(KeyConditionExpression=Key(self.key).eq(identifier))
         items = response["Items"]
@@ -30,13 +35,12 @@ class DataHandler:
             return None
 
         if len(items) > 1:
+            self.log("Multiple items present in the queryset")
             raise Exception(f"More than one item found for {identifier}")
-
-        print(items)
 
         entry = items[0]
         return entry
 
-    def scan_items(self, limit=1000):
-        result = self.table.scan(Limit=limit)
+    def scan_items(self, *args, **kwargs):
+        result = self.table.scan(**kwargs)
         return result["Items"]
