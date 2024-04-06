@@ -22,6 +22,12 @@ class DataHandler:
     def add_item(self, identifier, value):
         self.table.put_item(Item={self.key: identifier, **value})
 
+    def update_item(self, identifier, value):
+        if value.has_key(self.key):
+            self.log("remove key from the value")
+            value.pop(self.key)
+        self.table.put_item(Item={self.key: identifier, **value})
+
     def log(self, message):
         if self._logger is None:
             print(message)
@@ -43,4 +49,10 @@ class DataHandler:
 
     def scan_items(self, *args, **kwargs):
         result = self.table.scan(**kwargs)
+        return result["Items"]
+
+    def query_items(self, *args, **kwargs):
+        result = self.table.query(**kwargs)
+        if not result:
+            return None
         return result["Items"]
