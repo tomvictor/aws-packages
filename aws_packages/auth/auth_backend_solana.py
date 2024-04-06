@@ -4,41 +4,21 @@
 
 import os
 
-from ic.agent import Agent
-from ic.candid import Types, encode
-from ic.client import Client
-from ic.identity import Identity
-
 from aws_packages.auth.auth_backend_base import AuthBackendBase
 from aws_packages.auth.models import AuthenticationRequest, User
 from aws_packages.auth.tokens import AccessToken
 
 
-class ICPAuthBackend(AuthBackendBase):
-    """Authentication backend with ICP Canister"""
+class SolanaAuthBackend(AuthBackendBase):
+    """Authentication backend with Solana Canister"""
 
-    def __init__(self, url: str, auth_canister: str, auth_function: str):
+    def __init__(self, url: str):
         self._url = url
-        self._identity = Identity()
-        self._client = Client(url=self._url)
-        self._icp_agent = Agent(self._identity, self._client)
-        self._auth_canister = auth_canister
-        self._canister_auth_func = auth_function
 
     def authenticate(self, login_request: AuthenticationRequest) -> User:
         """Authenticate the request and returns an authenticated User"""
-        encoded_args = encode(
-            [
-                {
-                    "type": Types.Principal,
-                    "value": login_request.user,
-                }
-            ]
-        )
 
-        self._icp_agent.update_raw(
-            self._auth_canister, self._canister_auth_func, encoded_args
-        )
+        # solana sdk call and authenticate or raise exception
 
         return User(principal=login_request.user)
 
@@ -53,17 +33,13 @@ class ICPAuthBackend(AuthBackendBase):
         return token.get_access_token(user)
 
 
-icp_auth_backend = ICPAuthBackend(
+solana_auth_backend = SolanaAuthBackend(
     url="https://ic0.app",
-    auth_canister=os.environ.get("CANISTER_ID"),
-    auth_function="getUserToken",
 )
 
 if __name__ == "__main__":
-    icp_auth_backend = ICPAuthBackend(
+    icp_auth_backend = SolanaAuthBackend(
         url="https://ic0.app",
-        auth_canister="6qy4q-5aaaa-aaaah-adwma-cai",
-        auth_function="getUserToken",
     )
 
     request = AuthenticationRequest(
