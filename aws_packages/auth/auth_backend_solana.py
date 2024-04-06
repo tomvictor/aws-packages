@@ -46,5 +46,5 @@ if __name__ == "__main__":
         user="4cay5-ew3bs-vr6yl-7iffu-67doc-l655v-dluy7-qplpx-7pkio-er5rt-uqe",
         authcode="",
     )
-    user = icp_auth_backend.authenticate(request)
+    user = solana_auth_backend.authenticate(request)
     print(user)

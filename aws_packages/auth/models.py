@@ -25,3 +25,13 @@ class User:
     """User model."""
 
     principal: str
+
+
+@dataclass
+class LoginResponse:
+    """Login response model"""
+
+    access_token: str
+
+    def as_dict(self):
+        return {"access_token": self.access_token}

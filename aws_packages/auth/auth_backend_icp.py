@@ -2,15 +2,19 @@
 
 """
 
+import json
 import os
+from http import HTTPStatus
 
+from aws_lambda_powertools.event_handler import Response, content_types
+from aws_lambda_powertools.event_handler.exceptions import BadRequestError
 from ic.agent import Agent
 from ic.candid import Types, encode
 from ic.client import Client
 from ic.identity import Identity
 
 from aws_packages.auth.auth_backend_base import AuthBackendBase
-from aws_packages.auth.models import AuthenticationRequest, User
+from aws_packages.auth.models import AuthenticationRequest, LoginResponse, User
 from aws_packages.auth.tokens import AccessToken
 
 
@@ -58,6 +62,7 @@ icp_auth_backend = ICPAuthBackend(
     auth_canister=os.environ.get("CANISTER_ID"),
     auth_function="getUserToken",
 )
+
 
 if __name__ == "__main__":
     icp_auth_backend = ICPAuthBackend(

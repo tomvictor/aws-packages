@@ -7,6 +7,7 @@ from models import User
 
 from .exceptions import JWTAuthError
 
+
 DEFAULT_SECRET_KEY = "27d621e9bc55e6c659842904982abf06d89123c844e4d8bc62060ccd6536c360"
 SECRET_KEY = os.environ.get("SECRET_KEY", DEFAULT_SECRET_KEY)
 
