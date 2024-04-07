@@ -5,9 +5,8 @@ from aws_lambda_powertools.event_handler.exceptions import UnauthorizedError
 from aws_lambda_powertools.event_handler.middlewares import NextMiddleware
 
 from aws_packages.auth.auth_backend_icp import icp_auth_backend
+from aws_packages.auth.exceptions import JWTAuthError
 from aws_packages.auth.models import AuthorizationRequest
-
-from .exceptions import JWTAuthError
 
 
 def icp_login_required(
