@@ -1,27 +1,15 @@
 import os
-from calendar import timegm
-from datetime import datetime, timedelta, timezone
+from datetime import timedelta
 
 import jwt
 from models import User
 
-from .exceptions import JWTAuthError
+from aws_packages.time import aware_utcnow, datetime_to_epoch
 
+from .exceptions import JWTAuthError
 
 DEFAULT_SECRET_KEY = "27d621e9bc55e6c659842904982abf06d89123c844e4d8bc62060ccd6536c360"
 SECRET_KEY = os.environ.get("SECRET_KEY", DEFAULT_SECRET_KEY)
-
-
-def datetime_to_epoch(dt: datetime) -> int:
-    return timegm(dt.utctimetuple())
-
-
-def aware_utcnow(use_tz=False) -> datetime:
-    dt = datetime.now(tz=timezone.utc)
-    if not use_tz:
-        dt = dt.replace(tzinfo=None)
-
-    return dt
 
 
 class Token:
