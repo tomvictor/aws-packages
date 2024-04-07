@@ -2,8 +2,6 @@
 
 """
 
-import os
-
 from aws_packages.auth.auth_backend_base import AuthBackendBase
 from aws_packages.auth.models import AuthenticationRequest, User
 from aws_packages.auth.tokens import AccessToken
@@ -38,7 +36,7 @@ solana_auth_backend = SolanaAuthBackend(
 )
 
 if __name__ == "__main__":
-    icp_auth_backend = SolanaAuthBackend(
+    _auth_backend = SolanaAuthBackend(
         url="https://ic0.app",
     )
 

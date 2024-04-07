@@ -6,9 +6,10 @@ from aws_lambda_powertools.event_handler.middlewares import NextMiddleware
 
 from aws_packages.auth.exceptions import JWTAuthError
 from aws_packages.auth.models import AuthorizationRequest
+from aws_packages.auth.solana.auth_backend import solana_auth_backend
 
 
-def icp_login_required(
+def solana_login_required(
     app: APIGatewayRestResolver, next_middleware: NextMiddleware
 ) -> Response:
     """Login required middleware
@@ -20,8 +21,7 @@ def icp_login_required(
 
     request = AuthorizationRequest(**app.current_event.headers)
     try:
-        # TODO: generic backend
-        generic_backend.authenticate_with_token(request.token)
+        solana_auth_backend.authenticate_with_token(request.token)
     except JWTAuthError:
         raise UnauthorizedError(f"Unauthorized")
     return next_middleware(app)

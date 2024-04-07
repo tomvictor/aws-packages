@@ -4,9 +4,7 @@ from http import HTTPStatus
 from aws_lambda_powertools.event_handler import Response, content_types
 from aws_lambda_powertools.event_handler.exceptions import BadRequestError
 
-from aws_packages.auth.auth_backend_icp import icp_auth_backend
-from aws_packages.auth.auth_backend_solana import solana_auth_backend
-from aws_packages.auth.models import AuthenticationRequest, LoginResponse, User
+from aws_packages.auth.models import AuthenticationRequest, LoginResponse
 
 
 def process_authenticate_request(request_body, auth_backend):
@@ -31,11 +29,3 @@ def process_authenticate_request(request_body, auth_backend):
             access_token=auth_backend.get_access_token(auth_user)
         ).as_dict(),
     )
-
-
-def process_icp_authenticate_request(request_body):
-    return process_authenticate_request(request_body, icp_auth_backend)
-
-
-def process_solana_authenticate_request(request_body):
-    return process_authenticate_request(request_body, solana_auth_backend)
