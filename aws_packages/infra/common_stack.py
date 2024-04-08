@@ -18,7 +18,7 @@ class CommonServiceStack(Stack):
 
         self._stage_name = stage_name
 
-    def _create_general_dynamo_table(self, name: str, stage_name: str):
+    def create_general_dynamo_table(self, name: str, stage_name: str):
         return dynamodb.TableV2(
             self,
             f"{self._stage_name}-{name}-table",
