@@ -2,6 +2,8 @@ from os import path
 
 from aws_cdk import CfnOutput, Duration, RemovalPolicy, Stack
 from aws_cdk import aws_apigateway as apigw
+from aws_cdk import aws_cloudfront as cloudfront
+from aws_cdk import aws_cloudfront_origins as origins
 from aws_cdk import aws_dynamodb as dynamodb
 from aws_cdk import aws_lambda as lambda_
 from aws_cdk.aws_apigateway import Cors, CorsOptions
@@ -34,7 +36,7 @@ class CommonServiceStack(Stack):
             ),
         )
 
-    def _create_python_lambda_function(
+    def create_python_lambda_function(
         self,
         identifier: str,
         source: str,
@@ -55,7 +57,7 @@ class CommonServiceStack(Stack):
         )
         return _lambda_function
 
-    def _create_node_lambda_function(
+    def create_node_lambda_function(
         self,
         identifier: str,
         source: str,
@@ -76,7 +78,7 @@ class CommonServiceStack(Stack):
         )
         return _lambda_function
 
-    def _create_api_gw(self, identifier: str, handler_function):
+    def create_api_gw(self, identifier: str, handler_function):
         api_gateway_resource = apigw.LambdaRestApi(
             self,
             identifier,
@@ -90,3 +92,16 @@ class CommonServiceStack(Stack):
             ),
         )
         return api_gateway_resource
+
+    def create_cloudfront_distribution(self, name, stage_name, api_gateway):
+        return cloudfront.Distribution(
+            self,
+            f"{stage_name}-{name}",
+            comment=f"{stage_name}-{name}",
+            default_behavior=cloudfront.BehaviorOptions(
+                origin=origins.RestApiOrigin(api_gateway),
+                allowed_methods=cloudfront.AllowedMethods.ALLOW_ALL,
+                cache_policy=cloudfront.CachePolicy.CACHING_DISABLED,
+                origin_request_policy=cloudfront.OriginRequestPolicy.ALL_VIEWER_EXCEPT_HOST_HEADER,
+            ),
+        )
