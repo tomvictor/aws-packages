@@ -55,6 +55,27 @@ class CommonServiceStack(Stack):
         )
         return _lambda_function
 
+    def _create_node_lambda_function(
+        self,
+        identifier: str,
+        source: str,
+        lambda_layers: list,
+        envs: dict,
+        function_handler: str,
+    ):
+        _lambda_function = lambda_.Function(
+            self,
+            identifier,
+            function_name=identifier,
+            code=lambda_.Code.from_asset(path.join(source)),
+            handler=function_handler,
+            runtime=lambda_.Runtime.NODEJS_20_X,
+            timeout=Duration.seconds(300),
+            layers=lambda_layers,
+            environment=envs,
+        )
+        return _lambda_function
+
     def _create_api_gw(self, identifier: str, handler_function):
         api_gateway_resource = apigw.LambdaRestApi(
             self,
