@@ -32,6 +32,10 @@ class SolanaAuthBackend(AuthBackendBase):
         token = AccessToken()
         return token.get_access_token(user)
 
+    def get_refresh_token(self, user: User, token: str) -> str:
+        """Get the refresh token for the given user"""
+        raise NotImplementedError("get_refresh_token is not implemented")
+
 
 solana_auth_backend = SolanaAuthBackend(
     url="https://ic0.app",
