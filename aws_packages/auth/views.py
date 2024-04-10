@@ -4,7 +4,7 @@ from http import HTTPStatus
 from aws_lambda_powertools.event_handler import Response, content_types
 from aws_lambda_powertools.event_handler.exceptions import BadRequestError
 
-from aws_packages.auth.auth_backend_base import AuthBackendBase
+from aws_packages.auth.auth_backend_abc import AuthBackendBase
 from aws_packages.auth.models import AuthenticationRequest, LoginResponse
 
 

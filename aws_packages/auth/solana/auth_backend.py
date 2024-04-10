@@ -2,7 +2,7 @@
 
 """
 
-from aws_packages.auth.auth_backend_base import AuthBackendBase
+from aws_packages.auth.auth_backend_abc import AuthBackendBase
 from aws_packages.auth.models import AuthenticationRequest, User
 from aws_packages.auth.tokens import AccessToken
 
