@@ -13,12 +13,14 @@ class SolanaAuthBackend(AuthBackendBase):
     def __init__(self, url: str):
         self._url = url
 
-    def authenticate(self, login_request: AuthenticationRequest) -> User:
+    def authenticate(self, login_request_body: AuthenticationRequest) -> User:
         """Authenticate the request and returns an authenticated User"""
 
         # solana sdk call and authenticate or raise exception
+        if login_request_body.authcode != "1234":
+            raise Exception("Invalid authcode")
 
-        return User(principal=login_request.user)
+        return User(principal=login_request_body.user)
 
     def authenticate_with_token(self, token: str):
         """Authenticate user using jwt token and return status"""
