@@ -52,6 +52,10 @@ class ICPAuthBackend(AuthBackendBase):
         token = AccessToken()
         return token.get_access_token(user)
 
+    def get_refresh_token(self, user: User, token: str) -> str:
+        """Get the refresh token for the given user"""
+        raise NotImplementedError("get_refresh_token is not implemented")
+
 
 icp_auth_backend = ICPAuthBackend(
     url="https://ic0.app",
