@@ -22,6 +22,6 @@ def solana_login_required(
     request = AuthorizationRequest(**app.current_event.headers)
     try:
         solana_auth_backend.authenticate_with_token(request.token)
-    except JWTAuthError:
-        raise UnauthorizedError(f"Unauthorized")
+    except Exception as exc:
+        raise UnauthorizedError(f"Unauthorized: {exc}")
     return next_middleware(app)
