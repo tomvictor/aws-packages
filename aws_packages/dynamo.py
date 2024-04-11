@@ -9,7 +9,7 @@ def get_dynamodb_client():
 
 
 class DataHandler:
-    def __init__(self, table_name, logger=None, client=None, key="pk"):
+    def __init__(self, table_name: str, logger=None, client=None, key="pk"):
         self.key = key
         if client is None:
             self._client = get_dynamodb_client()
@@ -19,21 +19,21 @@ class DataHandler:
         self._logger = logger
         self.table = self._client.Table(self._table_name)
 
-    def add_item(self, identifier, value):
+    def add_item(self, identifier: str, value: dict):
         self.table.put_item(Item={self.key: identifier, **value})
 
-    def update_item(self, identifier, value):
-        if value.has_key(self.key):
+    def update_item(self, identifier: str, value: dict):
+        if self.key in value.keys():
             self.log("remove key from the value")
             value.pop(self.key)
         self.table.put_item(Item={self.key: identifier, **value})
 
-    def log(self, message):
+    def log(self, message: str):
         if self._logger is None:
             print(message)
         self._logger.info(msg=message)
 
-    def get_item(self, identifier):
+    def get_item(self, identifier: str):
         response = self.table.query(KeyConditionExpression=Key(self.key).eq(identifier))
         items = response["Items"]
 
