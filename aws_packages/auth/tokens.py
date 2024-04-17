@@ -22,6 +22,9 @@ class Token:
         self._exp = aware_utcnow() + self.lifetime
         self._jwt_payload = {"exp": self.get_exp()}
 
+    def get_payload(self):
+        return self._jwt_payload
+
     def get_exp(self):
         return datetime_to_epoch(self._exp)
 
@@ -44,6 +47,7 @@ class Token:
             self._token_string, self.secret_key, algorithms=["HS256"]
         )
         print(decoded_jwt)
+        self._jwt_payload = decoded_jwt
 
         jwt_expiration = decoded_jwt["exp"]
         timestamp_now = datetime_to_epoch(aware_utcnow())
@@ -64,3 +68,10 @@ if __name__ == "__main__":
     new_jwt_token = token.get_access_token(user)
 
     print(new_jwt_token)
+
+    print("*"*30)
+
+    test_token_str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTU4OTI3NzgsInVzZXJfaWQiOiJGTTJXeXhTdnFtTDh5ZzNNd054MXhOMnZlZm55SGVZcmlQRWtEWTl4QlVCeiJ9.bCLR2k22Cprp85mjitpC_-kM85qEFEW-Hf7gzzplBuE"
+    test_token = AccessToken(token_string=test_token_str)
+
+    print(f"payload token: {test_token.get_payload()}")
