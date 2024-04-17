@@ -19,8 +19,9 @@ class Token:
         self._token_string = token_string
         if self._token_string:
             self.validate_jwt_token()
-        self._exp = aware_utcnow() + self.lifetime
-        self._jwt_payload = {"exp": self.get_exp()}
+        else:
+            self._exp = aware_utcnow() + self.lifetime
+            self._jwt_payload = {"exp": self.get_exp()}
 
     def get_payload(self):
         return self._jwt_payload
@@ -69,7 +70,7 @@ if __name__ == "__main__":
 
     print(new_jwt_token)
 
-    print("*"*30)
+    print("*" * 30)
 
     test_token_str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3MTU4OTI3NzgsInVzZXJfaWQiOiJGTTJXeXhTdnFtTDh5ZzNNd054MXhOMnZlZm55SGVZcmlQRWtEWTl4QlVCeiJ9.bCLR2k22Cprp85mjitpC_-kM85qEFEW-Hf7gzzplBuE"
     test_token = AccessToken(token_string=test_token_str)
